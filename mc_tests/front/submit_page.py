@@ -40,6 +40,8 @@ class SubmitPage(Page):
             self._tag_form(kwargs['tags'])
         elif form == 'direct':
             self._direct_form(**kwargs)
+        self._submit_form()
+        return self._thanks()
    
     def _error_message(self):
         if self.is_element_visible(self._ERROR):
@@ -56,8 +58,7 @@ class SubmitPage(Page):
     def _scraped_form(self, **kwargs):
         print "I am on the scraped video form"
         print kwargs
-        self.click_by_css(self._SUBMIT)
-
+        
     def _tag_form(self, **kwargs):
         tags = kwargs.get('tags', None)
         if tags == None:
@@ -67,7 +68,6 @@ class SubmitPage(Page):
         else:
             for tag in tags:
                 self.type_by_css(self._TAGS, ", ".join(tags))
-        self._submit_form()
 
     def _direct_form(self, **kwargs):
         try:
@@ -89,13 +89,16 @@ class SubmitPage(Page):
                 field = "_"+str(k).upper()
                 self.type_by_css(getattr(self, field), v)
                 
-        self._submit_form()
 
     def _thanks(self):
-        video_link = self.get_attr(self._SUBMITTED_VID_LINK, 'href')
-        print video_link
+        self.wait_for_element_present(self._SUBMITTED_VID_LINK)
+        video_link = self.get_element_attribute(self._SUBMITTED_VID_LINK, 'href')
         return video_link
+    
+    def _submit_form(self):
+        self.click_by_css(self._SUBMIT)
 
+        
     
         
         

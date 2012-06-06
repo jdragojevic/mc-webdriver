@@ -40,10 +40,11 @@ class BulkEditPage(AdminNav):
 
         actions = Bulk Actions, Edit, Delete, Approve, Unapprove, Feature, Unfeature
         """
-        if self._items_in_table():
-            self.wait_for_element_present(self._BULK_EDIT)
+        if self._items_in_table() == True:
             self.select_option_by_text(self._BULK_EDIT, action)
-        print 'no items in the table'
+            self.click_by_css(self._BULK_EDIT_APPLY)
+        else:
+            print 'no items in the table'
  
     def _search(self, term):
         self.type_by_css(self._SEARCH, term)
@@ -51,8 +52,6 @@ class BulkEditPage(AdminNav):
      
     def _select_all_visible(self):
         print 'selecting all visible items'
-        self.wait_for_element_present(self._SELECT_ALL)
-        self.wait_for_element_visible(self._SELECT_ALL)
         self.click_by_css(self._SELECT_ALL)
  
     def _items_in_table(self):
@@ -79,4 +78,4 @@ class BulkEditPage(AdminNav):
         self._search(term)
         self._select_all_visible()
         self._bulk_edit_action("Delete")
-  
+         

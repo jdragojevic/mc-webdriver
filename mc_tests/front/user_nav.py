@@ -63,7 +63,7 @@ class NavPage(Page):
                }
 
     SEARCH_BOX = "form#search input#search_field"
-    SEARCH_SUBMIT = "form#search input#searchbutton"
+    SEARCH_SUBMIT = "form#search button span.search-icon"
 
     ADMIN = {"css": "a[href='/admin/']",
              "text": "View Admin"}
@@ -77,7 +77,7 @@ class NavPage(Page):
             return True
         else:
             return False
-   
+
     def logout(self):
         if self.is_logged_in() == True:
             self.click_by_css(self.LOGOUT['css'])
@@ -104,7 +104,6 @@ class NavPage(Page):
         Login().login(**kwargs)
         return self.is_logged_in()
 
-         
 
     
         

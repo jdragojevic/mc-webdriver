@@ -39,7 +39,6 @@ class TestSubmitVideos():
             bulk_pg = BulkEditPage()
             bulk_pg.open_bulk_page()
             bulk_pg.search_and_bulk_delete(metadata.get('search', 'title'))
-            time.sleep(5) #give the db a chance to catch up if we are submitting vids
 
     def setup_func():
         """Make sure site settings are set to default (open submit permissions and link displayed).

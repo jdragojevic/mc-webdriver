@@ -159,8 +159,6 @@ class WebdriverFragments(object):
             raise Exception(MULTIPLE_ELS % element)
         else:
             element_text = elements_found[0].text
-            print text
-            print element_text
             if text == element_text:
                 return True
             else:
@@ -225,7 +223,7 @@ class WebdriverFragments(object):
         return full_url
 
 
-    def get_attr(self, element, attr):
+    def get_element_attribute(self, element, html_attribute):
         try:
             elements_found = self.browser.find_elements_by_css_selector(element)
         except NoSuchElementException:
@@ -233,8 +231,7 @@ class WebdriverFragments(object):
 
         if len(elements_found) > 1:
             raise Exception(MULTIPLE_ELS % element)
-
-        return elements_found[0].get_attribute(attr)
+        return elements_found[0].get_attribute(html_attribute)
 
     def open_page(self, url):
         self.browser.get(self.get_absolute_url(url))
