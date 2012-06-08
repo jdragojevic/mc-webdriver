@@ -7,16 +7,20 @@ from admin.settings_page import SettingsPage
 from admin.bulk_edit_page import BulkEditPage
 from front.user_nav import NavPage
 from front.submit_page import SubmitPage
+from front.video_page import VideoPage
 
 class TestSubmitVideos():
     
     test_videos = { 'youtube': {
                         'url': 'http://www.youtube.com/watch?v=WqJineyEszo',
                         'form': 'scraped',
-                        'title': 'Stop looking at my mom',
-                        'search': 'X Factor audition',
+                        'title': 'X Factor Audition - Stop Looking At My Mom',
+                        'search': 'stop looking at my mom rap', #term that returns a unique result
+                        'tags': ['competition', 'mom', 'music', 'rap'],
+                        'description': 'Brian Bradley sings his original song Stop Looking',
                         'source': 'clowntownhonkhonk',
-                        },
+                    },
+                   
 ##                    'vimeo': {
 ##                        'url': 'http://vimeo.com/26487510',
 ####                        'title': u'Con la música a otra parte',
@@ -55,26 +59,27 @@ class TestSubmitVideos():
 
     @with_setup(setup_func, teardown_func)     
     def test_video_submit(self):
-        for tc, vid_url in self.test_videos.iteritems():
-            yield self.verify_video_submit, tc
+        for testcase in self.test_videos.iterkeys():
+            yield self.verify_video_submit, testcase
 
-#    def test_submit_duplicate_video(self):
-#        """Submit a duplicate video.
-#
-#        """
-#        pass
-
+    def test_video_submit_duplicate(self):
+        for testcase, vals in self.test_videos.iteritems():
+            self.test_videos[testcase + 'duplicate'] = self.test_videos[testcase]
+            self.test_videos[testcase + 'duplicate']['form'] = 'duplicate'
+            yield self.verify_video_submit, testcase
+            self.test_videos.pop(testcase + 'duplicate')
+              
 
     def verify_video_submit(self, testcase):
         submit_pg = SubmitPage()
         kwargs = self.test_videos[testcase]
         video_page_url = submit_pg.submit_a_valid_video(**kwargs)
-        print video_page_url
-#        video_pg = VideoPage()
+        video_pg = VideoPage()
+        video_pg.open_page(video_page_url)
+        video_metadata = video_pg.check_video_details(**kwargs)
+        for results in video_metadata:
+            assert_false(results)
         
-        
-        
-      
 
 
     

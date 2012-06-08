@@ -36,11 +36,12 @@ class VideoPage(Page):
 
     def _video_data(self, data_field, data_value):
         vid_field = "_".join(["", data_field]).upper()
-        field = getattr(self, vid_field)
-        if data_field == 'tags':
-            pass
-        elif data_value in self.get_text_by_css(field):
-            return True
-        else:
-            return "Expected {0}, for {1} but found {2} instead.".format(data_value, data_field, self.get_text_by_css(field))
+        if hasattr(self, vid_field):
+            field = getattr(self, vid_field)
+            if data_field == 'tags':
+                pass
+            elif data_value in self.get_text_by_css(field):
+                return True
+            else:
+                return "Expected {0}, for {1} but found {2} instead.".format(data_value, data_field, self.get_text_by_css(field))
         

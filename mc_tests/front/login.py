@@ -40,7 +40,6 @@ class Login(Page):
     def site(self, **kwargs):
         auth = {}
         auth.update(kwargs)
-        print auth
         self.type_by_css(self._SITE_USERNAME, auth['user'])
         self.type_by_css(self._SITE_PASSWORD, auth['passw'])
         self.click_by_css(self._LOGIN)

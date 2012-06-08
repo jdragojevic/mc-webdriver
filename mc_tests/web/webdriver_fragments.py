@@ -31,6 +31,9 @@ class WebdriverFragments(object):
         self.browser.implicitly_wait(10) #seconds
         
 
+    def current_url(self):
+        return self.browser.current_url
+
     def handle_js_alert(self, action):
         a = self.browser.switch_to_alert()
         if action == "accept":
