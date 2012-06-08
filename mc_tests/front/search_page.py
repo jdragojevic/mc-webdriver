@@ -19,8 +19,19 @@ class SearchPage(NavPage):
             self.open()
 
     def search(self, term):
+        self.on_searchable_page()
+        self.clear_text(self.SEARCH_BOX)
         self.type_by_css(self.SEARCH_BOX, term)
         self.click_by_css(self.SEARCH_SUBMIT)
+
+    def has_results(self):
+        results =  self._search_results()
+        if results['titles'] > 0:
+            return True, results
+        else:
+            return False, results
+        
+        
 
     
     def click_first_result(self):
@@ -28,5 +39,15 @@ class SearchPage(NavPage):
         self.click_by_css(self._SEARCH_RESULT_THUMB)
         return vid_page
         
-        
+    def _search_results(self):
+        result = {}
+        thumbs = self.count_elements_present(self._SEARCH_RESULT_THUMB)
+        titles = self.count_elements_present(self._SEARCH_RESULT_TITLE)
+        times = self.count_elements_present(self._SEARCH_RESULT_TIMESTAMP)
+        result = {'thumbs': thumbs,
+                  'titles': titles,
+                  'times': times,
+                  }
+        return result
+
         
