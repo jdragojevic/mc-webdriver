@@ -8,7 +8,7 @@ from admin.manage_page import ManagePage
 from front.search_page import SearchPage
 from front.video_page import VideoPage
 
-class TestVideoPage():
+class TestSubmitVideoFeeds():
     test_feeds = { 'youtube user': {
                    'feed url': 'http://www.youtube.com/user/clowntownhonkhonk',
                    'feed name': 'clowntownhonkhonk',
@@ -32,7 +32,7 @@ class TestVideoPage():
 
         """
         pass
-#        t = TestVideoPage()
+#        t = TestSubmitVideoFeeds()
 #        t.delete_feeds(t.test_feeds)
         
     def teardown_func():
@@ -61,7 +61,6 @@ class TestVideoPage():
         search_pg.on_searchable_page()
         kwargs = self.test_videos[testcase]
         search_pg.search(kwargs['search'])
-        del kwargs['search']
         page_url = search_pg.click_first_result()
         video_pg = VideoPage()
         video_metadata = video_pg.check_video_details(**kwargs)

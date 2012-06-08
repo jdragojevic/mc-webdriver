@@ -124,6 +124,14 @@ class WebdriverFragments(object):
         else:
             return False
 
+    def count_elements_present(self, element):
+        try:
+            elements_found = self.browser.find_elements_by_css_selector(element)
+        except NoSuchElementException():
+            return 0
+        return len(elements_found)
+    
+
     def is_element_visible(self, element):
         if not self.is_element_present(element):
             return False
