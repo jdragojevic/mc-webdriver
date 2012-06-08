@@ -12,7 +12,7 @@ class NavPage(Page):
     """
 
     #FOOTER NAVIGATION
-    LOGIN =          {'css': "a[title='Please Sign In']",
+    LOGIN =          {'css': ".nav-login a",
                       'text': "Login"}
 
     FOOTER_HOME =    {'css': "ul#footer_links li a[href='/'",

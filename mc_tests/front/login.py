@@ -4,11 +4,12 @@ from page import Page
 
 class Login(Page):
     """
-     Overlay that displays when the user chooses to login.
+     Page that displays when the user chooses to login.
      Contains, site, signin, facebook, openinstall, and google options.
      
     """
-    _ERROR = "ul.errorlist"
+    _LOGIN_PAGE_TITLE = "h1.page-title"
+    _ERROR = "ul.errorlist li"
     _FORGOT_PASS_ERROR = "div a[href='/accounts/password/reset/']"
     _TABS = {'site':
                 {"css": ".login_tab_user",
@@ -43,20 +44,17 @@ class Login(Page):
         self.type_by_css(self._SITE_USERNAME, auth['user'])
         self.type_by_css(self._SITE_PASSWORD, auth['passw'])
         self.click_by_css(self._LOGIN)
-        if not auth['success'] == True:
-            self.login_error(auth['success'])
+        if auth['success'] == True:
+            self.login_page_gone()
         else:
-            self.overlay_gone()
+            self.login_error(auth['success'])
 
-    def overlay_present(self):
-        if self.is_element_present(self._SITE_USERNAME):
-            return True
 
     def login_error(self, error):
         
         if error == 'bad password':
-            assert self.is_element_present(self._FORGOT_PASS_ERROR), \
-            'Invalid user or pass message not displayed'
+            assert self.is_element_present(self._LOGIN), \
+            'Login form not returned to view'
         elif error == 'blank value':
             self.wait_for_element_present(self._ERROR)
             assert self.verify_text_present(self._ERROR, "This field is required."), \
@@ -67,9 +65,6 @@ class Login(Page):
             'Account inactive message not displayed'
         else:
             assert False, "expected an error, but not this one"
-        time.sleep(2)
-        self.click_by_css(self._CLOSE)
-                
             
     def signup(self, *args):
         user, passw, email, success = args
@@ -78,8 +73,6 @@ class Login(Page):
         self.type_by_css(self._SIGNUP_PASSWORD1, passw)
         self.type_by_css(self._SIGNUP_PASSWORD2, passw)
         self.click_by_css(self._SIGNUP_SUBMIT)
-        if success:
-            self.overlay_gone()
               
     def facebook(self, *args):
         user, passw, _ = args
@@ -114,8 +107,8 @@ class Login(Page):
             self.choose_login_tab(l['tab'])
         getattr(self, l['tab']) (**l)
 
-    def overlay_gone(self):
-        self.wait_for_element_not_visible(self._TABS['site']['css'])
+    def login_page_gone(self):
+        self.wait_for_element_not_present(self._TABS['site']['css'])
         
 
 

@@ -26,29 +26,34 @@ class TestVideoPage():
                     },
                    }
 
-    def add_feeds(self, testdata):
-            manage_pg = ManagePage()
-            manage_pg.open_manage_page()
-            kwargs = testdata['youtube user']
-            manage_pg.submit_feed(**kwargs)
-
-
 
     def setup_func():
         """Make sure site settings are set to default (open submit permissions and link displayed).
 
         """
-        t = TestVideoPage()
-        t.add_feeds(t.test_feeds)
+        pass
+#        t = TestVideoPage()
+#        t.delete_feeds(t.test_feeds)
         
     def teardown_func():
         "tear down test fixtures"
         
 
     @with_setup(setup_func, teardown_func)     
-    def test_video_page_layout(self):
+    def test_add_video_feed(self):
+        for video_source in self.test_feeds.iterkeys():
+            yield self.add_feeds, video_source
+
+    def test_feed_video_page(self):
         for video_source in self.test_videos.iterkeys():
             yield self.verify_video_page, video_source
+
+
+    def add_feeds(self, testcase):
+            manage_pg = ManagePage()
+            manage_pg.open_manage_page()
+            kwargs = self.test_feeds[testcase]
+            manage_pg.submit_feed(**kwargs)
 
 
     def verify_video_page(self, testcase):

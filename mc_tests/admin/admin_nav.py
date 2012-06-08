@@ -19,6 +19,6 @@ class AdminNav(Page):
             url = self._URL
         self.open_page(url)
         l =  Login()
-        if l.overlay_present():
+        if "login" in self.current_url:
             l.login(user=self.ADMIN_USER, passw=self.ADMIN_PASSW)
         
