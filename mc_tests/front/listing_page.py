@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 import time
 from page import Page
-from login import Login
 
-class NavPage(Page):
+class ListingPage(Page):
     """
      Unisubs page contains common web elements found across
      all Universal Subtitles pages. Every new page class is derived from
      UnisubsPage so that every child class can have access to common web 
      elements and methods that pertain to those elements.
     """
+
+    
 
     #FOOTER NAVIGATION
     LOGIN =          {'css': "a[title='Please Sign In']",
@@ -101,11 +102,8 @@ class NavPage(Page):
                   'tab': kind,
                   'success': success,
                   }
-        Login().login(**kwargs)
+        LoginOverlay().login(**kwargs)
         return self.is_logged_in()
-
-         
-
     
         
         

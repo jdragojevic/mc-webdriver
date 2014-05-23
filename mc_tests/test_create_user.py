@@ -1,7 +1,3 @@
-try:
-    from django.test import LiveServerTestCase
-except:
-   pass
 import time
 from nose.tools import assert_true, assert_false
 from front.user_nav import NavPage
@@ -29,36 +25,36 @@ def test_register_user_activate_login():
     assert_true mc.login(**kwargs), 'Login failed with new user account'
 
 def test_create_user_admin_ui():
-    pass
+    assert False, 'This test needs to be created' 
 
 def test_make_user_an_admin():
-    pass
+    assert False, 'This test needs to be created'
 
 
 class SubUI(TestCase):
     def test_create_user(self):
-        pass
+        assert False, 'This test needs to be created'
 
     def test_activate_user(self):
-        pass
+        assert False, 'This test needs to be created'
 
     def test_create_user_mismatch_password(self):
-        pass
+        assert False, 'This test needs to be created' 
 
     def test_create_user_invalid_email(self):
-        pass
+        assert False, 'This test needs to be created' 
 
     def test_create_user_short_username(self):
-        pass
+        assert False, 'This test needs to be created' 
 
     def test_create_user_long_username(self):
-        pass
+        assert False, 'This test needs to be created'    
 
     def test_create_admin(self):
-        pass
+        assert False, 'This test needs to be created'    
 
     def test_change_user_privilages(self):
-        pass
+        assert False, 'This test needs to be created' 
     
 
     

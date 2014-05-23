@@ -1,6 +1,7 @@
 from  web.webdriver_fragments import WebdriverFragments
 
 class Page(WebdriverFragments):
+     
     @property
     def is_the_current_page(self):
         page_title = self.browser.title()
@@ -12,7 +13,10 @@ class Page(WebdriverFragments):
                 raise Exception('Expected page title does not match actual page title.')
         else:
             return True
-    def open(self):
-        self.open_page('')
+ 
+    def open(self, url=None):
+        if not url:
+            url = self.base_url
+        self.open_page(url)
 
 

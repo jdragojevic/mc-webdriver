@@ -4,6 +4,7 @@ import time
 from urlparse import urlsplit
 from selenium import webdriver
 from selenium.webdriver.support import ui
+from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common import action_chains
 from selenium.common.exceptions import NoSuchElementException
 
@@ -23,8 +24,10 @@ class WebdriverFragments(object):
         '''Constructor'''
         self.base_url = setup.base_url
         self.browser = setup.browser
-        self.username = setup.admin_user
-        self.password = setup.admin_pass
+        self.ADMIN_USER = setup.admin_user
+        self.ADMIN_PASSW =  setup.admin_pass
+        self.USER = setup.normal_user
+        self.PASSW =  setup.normal_pass
         self.browser.implicitly_wait(10) #seconds
         
 
@@ -35,6 +38,22 @@ class WebdriverFragments(object):
         elif action == "reject":
             a.dismiss()
 
+    def check(self, element):
+        el = self.browser.find_element_by_css_selector(element)
+        if not el.is_selected():
+           el.click()
+
+    def uncheck(self, element):
+        el = self.browser.find_element_by_css_selector(element)
+        if el.is_selected():
+            el.click()
+            
+    def select_option_by_text(self, element, text):
+        select = Select(self.browser.find_element_by_css_selector(element))
+        print select.options
+        select.select_by_visible_text(text)
+
+        
     def hover_by_css(self, element):
         mouse = webdriver.ActionChains(self.browser)
         mouse.move_to_element(element).perform()

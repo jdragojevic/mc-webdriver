@@ -2,13 +2,12 @@
 import time
 from page import Page
 
-class LoginOverlay(Page):
+class Login(Page):
     """
      Overlay that displays when the user chooses to login.
      Contains, site, signin, facebook, openinstall, and google options.
      
     """
-    _CLOSE = "div#overlay a.close"
     _ERROR = "ul.errorlist"
     _FORGOT_PASS_ERROR = "div a[href='/accounts/password/reset/']"
     _TABS = {'site':
@@ -24,29 +23,34 @@ class LoginOverlay(Page):
                  "text": "Facebook"}
             }
     #SITE LOGIN FORM
-    _SITE_USERNAME = 'div.left input#id_username'
-    _SITE_PASSWORD = 'div.left input#id_password'
-    _LOGIN = 'div.left input.button'
+    _LOGIN_SIDE = 'form[action*="login"] '    
+    _SITE_USERNAME = _LOGIN_SIDE + 'input#id_username'
+    _SITE_PASSWORD = _LOGIN_SIDE + 'input#id_password'
+    _LOGIN = _LOGIN_SIDE + 'div.controls > button'
 
     #SITE SIGNUP FORM
-    _SIGNUP_USERNAME = 'div.right input#id_username'
-    _SIGNUP_EMAIL = 'div.right input#id_email'
-    _SIGNUP_PASSWORD1 = 'div.right input#id_password1'
-    _SIGNUP_PASSWORD2 = 'div.right input#id_password2'
-    _SIGNUP_SUBMIT = 'div.right input.button'
+    _REGISTER_SIDE = 'form[action*="register"] ' 
+    _SIGNUP_USERNAME = _REGISTER_SIDE + 'input#id_username'
+    _SIGNUP_EMAIL = _REGISTER_SIDE + 'input#id_email'
+    _SIGNUP_PASSWORD1 = _REGISTER_SIDE + 'input#id_password1'
+    _SIGNUP_PASSWORD2 = _REGISTER_SIDE + 'input#id_password2'
+    _SIGNUP_SUBMIT = _REGISTER_SIDE + 'div.controls > button'
 
-    def site(self, *args):
-        user, passw, _, success = args
-        print args
-        self.type_by_css(self._SITE_USERNAME, user)
-        self.type_by_css(self._SITE_PASSWORD, passw)
+    def site(self, **kwargs):
+        auth = {}
+        auth.update(kwargs)
+        print auth
+        self.type_by_css(self._SITE_USERNAME, auth['user'])
+        self.type_by_css(self._SITE_PASSWORD, auth['passw'])
         self.click_by_css(self._LOGIN)
-        print success
-        if not success == True:
-            self.login_error(success)
+        if not auth['success'] == True:
+            self.login_error(auth['success'])
         else:
             self.overlay_gone()
 
+    def overlay_present(self):
+        if self.is_element_present(self._SITE_USERNAME):
+            return True
 
     def login_error(self, error):
         
@@ -96,11 +100,19 @@ class LoginOverlay(Page):
     def choose_login_tab(self, tab):
         self.click_by_css(self._TABS[tab]['css'])
         
-    def login(self, user, passw, tab, email, success):
+    def login(self, **kwargs):
+        l = {
+            'user': self.USER,
+            'passw': self.PASSW,
+            'tab': 'site',
+            'email': None,
+            'success': True,
+            }
+        l.update(kwargs)
         self.wait_for_element_present(self._TABS['site']['css'])
-        if not tab.startswith('s'):
-            self.choose_login_tab(tab)
-        getattr(self, tab) (user, passw, email, success)
+        if not l['tab'].startswith('s'):
+            self.choose_login_tab(l['tab'])
+        getattr(self, l['tab']) (**l)
 
     def overlay_gone(self):
         self.wait_for_element_not_visible(self._TABS['site']['css'])
